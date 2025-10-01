@@ -15,7 +15,7 @@ jobs:
 
       - name: Ensure ZIP is present
         run: |
-          test -f SalesMasterApp.zip || (echo "ZIP not found in repo root" && exit 1)
+          test -f SalesMasterApp2.zip || (echo "ZIP not found in repo root" && exit 1)
           ls -la
 
       - name: Set up JDK 17
@@ -31,21 +31,20 @@ jobs:
         run: |
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
-      # Install Gradle (system Gradle 9.1)
-      - name: Set up Gradle
+      # Install a specific Gradle version (compatible with AGP 8.1.0 in this project)
+      - name: Set up Gradle 8.2
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: 9.1
+          gradle-version: 8.2
 
       - name: Unzip project
         run: |
           sudo apt-get update && sudo apt-get install -y unzip
           rm -rf project
-          unzip -q SalesMasterApp.zip -d project
+          unzip -q SalesMasterApp2.zip -d project
           echo "Project contents:" && ls -la project
 
-      # Use system Gradle (not ./gradlew)
-      - name: Build Debug APK
+      - name: Build Debug APK (using system Gradle)
         working-directory: project
         run: |
           gradle :app:assembleDebug
