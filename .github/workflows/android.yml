@@ -27,10 +27,12 @@ jobs:
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
       - name: Build Debug APK
-        run:  gradle assembleDebug
+        working-directory: SalesMasterPlay
+        run: |
+          gradle :app:assembleDebug
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
         with:
           name: app-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: SalesMasterPlay/app/build/outputs/apk/debug/*.apk
