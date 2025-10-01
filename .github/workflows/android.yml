@@ -31,6 +31,12 @@ jobs:
         run: |
           sdkmanager "platforms;android-34" "build-tools;34.0.0" "platform-tools"
 
+      # Install Gradle (system Gradle 9.1)
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: 9.1
+
       - name: Unzip project
         run: |
           sudo apt-get update && sudo apt-get install -y unzip
@@ -38,10 +44,11 @@ jobs:
           unzip -q SalesMasterApp.zip -d project
           echo "Project contents:" && ls -la project
 
+      # Use system Gradle (not ./gradlew)
       - name: Build Debug APK
         working-directory: project
         run: |
-          ./gradlew assembleDebug
+          gradle :app:assembleDebug
 
       - name: Upload Debug APK
         uses: actions/upload-artifact@v4
